@@ -1,3 +1,4 @@
+import { ClerkApp } from '@clerk/remix'
 import { rootAuthLoader } from '@clerk/remix/ssr.server'
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react'
@@ -9,8 +10,6 @@ import { Header } from '@/components/header'
 import { themeSessionResolver } from '@/lib/theme'
 
 import '@/globals.css'
-import { ClerkApp } from '@clerk/remix'
-import { dark, experimental__simple as light } from '@clerk/themes'
 
 export const loader = async (args: LoaderFunctionArgs) =>
   rootAuthLoader(args, async ({ request }) => {
@@ -21,9 +20,8 @@ export const loader = async (args: LoaderFunctionArgs) =>
 export const meta: MetaFunction = () => [
   {
     charSet: 'utf-8',
-    title: 'Learn Remix',
-    description: 'Learn how to use Remix to build web applications.',
-    viewport: 'width=device-width,initial-scale=1',
+    title: 'Remix Clerk Prisma',
+    description: 'A starter for Remix with Clerk and Prisma',
   },
 ]
 
