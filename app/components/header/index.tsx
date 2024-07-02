@@ -1,4 +1,6 @@
 import { Link } from '@remix-run/react'
+
+import { Auth } from './auth'
 import { ThemeToggle } from './toggle-theme'
 
 export const Header: React.FC = () => (
@@ -8,7 +10,10 @@ export const Header: React.FC = () => (
         Remix Blog
       </Link>
 
-      <ThemeToggle />
+      <div className="flex items-center gap-2">
+        <Auth />
+        <ThemeToggle />
+      </div>
     </div>
   </header>
 )

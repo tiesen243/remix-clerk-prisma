@@ -1,0 +1,27 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum STATE {
+  ACTIVE
+  COMPLETED
+}
+
+model Todo {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  title   String  @db.String
+  content String? @db.String
+  state   STATE   @default(ACTIVE)
+
+  userId String @db.String
+
+  createdAt DateTime @default(now())
+}

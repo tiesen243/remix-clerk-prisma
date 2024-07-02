@@ -1,22 +1,31 @@
+import { rootAuthLoader } from '@clerk/remix/ssr.server'
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react'
-
-import { Header } from '@/components/header'
-import '@/globals.css'
-import { themeSessionResolver } from './sessions.server'
-import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from 'remix-themes'
 import clsx from 'clsx'
+import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from 'remix-themes'
+
+import { Footer } from '@/components/footer'
+import { Header } from '@/components/header'
+import { themeSessionResolver } from '@/lib/theme'
+
+import '@/globals.css'
+import { ClerkApp } from '@clerk/remix'
+import { dark, experimental__simple as light } from '@clerk/themes'
+
+export const loader = async (args: LoaderFunctionArgs) =>
+  rootAuthLoader(args, async ({ request }) => {
+    const { getTheme } = await themeSessionResolver(request)
+    return { theme: getTheme() }
+  })
 
 export const meta: MetaFunction = () => [
-  { title: 'Very cool app | Remix' },
-  { property: 'og:title', content: 'Very cool app' },
-  { name: 'description', content: 'This app is the best' },
+  {
+    charSet: 'utf-8',
+    title: 'Learn Remix',
+    description: 'Learn how to use Remix to build web applications.',
+    viewport: 'width=device-width,initial-scale=1',
+  },
 ]
-
-export async function loader({ request }: LoaderFunctionArgs) {
-  const { getTheme } = await themeSessionResolver(request)
-  return { theme: getTheme() }
-}
 
 export const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   const data = useLoaderData<typeof loader>()
@@ -32,7 +41,8 @@ export const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   )
 }
 
-const App: React.FC = () => {
+function App() {
+  const data = useLoaderData<typeof loader>()
   const [theme] = useTheme()
 
   return (
@@ -41,15 +51,18 @@ const App: React.FC = () => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
+        <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />
         <Links />
       </head>
 
-      <body>
+      <body className="flex min-h-dvh flex-col">
         <Header />
 
-        <main className="container my-4">
+        <main className="container my-4 flex-1">
           <Outlet />
         </main>
+
+        <Footer />
 
         <ScrollRestoration />
         <Scripts />
@@ -58,4 +71,4 @@ const App: React.FC = () => {
   )
 }
 
-export default App
+export default ClerkApp(App)
