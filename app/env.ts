@@ -10,7 +10,7 @@ export const env = createEnv({
 
     CLERK_SIGN_IN_URL: z.string().default('/sign-in'),
     CLERK_SIGN_UP_URL: z.string().default('/sign-up'),
-    CLERK_SIGN_IN_FALLBACK_URL: z.string(),
+    CLERK_SIGN_IN_FALLBACK_URL: z.string().default('/'),
     CLERK_SIGN_UP_FALLBACK_URL: z.string().default('/'),
   },
 
