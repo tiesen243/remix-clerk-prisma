@@ -1,5 +1,5 @@
 const Page: React.FC = () => {
-  return <div>Page</div>
+  return <div>lorem ip</div>
 }
 
 export default Page
