@@ -19,6 +19,7 @@ model Todo {
   id      String  @id @default(auto()) @map("_id") @db.ObjectId
   title   String  @db.String
   content String? @db.String
+  image   String? @db.String
   state   STATE   @default(ACTIVE)
 
   userId String @db.String

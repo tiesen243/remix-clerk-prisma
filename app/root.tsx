@@ -7,6 +7,7 @@ import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from 'remix-themes'
 
 import { Footer } from '@/components/footer'
 import { Header } from '@/components/header'
+import { Toaster } from '@/components/ui/sonner'
 import { themeSessionResolver } from '@/lib/theme'
 
 import '@/globals.css'
@@ -61,6 +62,8 @@ function App() {
         </main>
 
         <Footer />
+
+        <Toaster />
 
         <ScrollRestoration />
         <Scripts />
