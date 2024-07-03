@@ -1,11 +1,9 @@
-import type { ActionFunctionArgs } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
-import { z } from 'zod'
+import { Link, useLoaderData } from '@remix-run/react'
 
-import { CreatePost } from '@/components/create-post'
+import { DeletePost } from '@/components/delete-post'
+import { Button } from '@/components/ui/button'
 import { clerkClient } from '@/lib/clerk'
 import { db } from '@/lib/db'
-import { DeletePost } from '@/components/delete-post'
 
 export const loader = async () => {
   const posts = await db.todo.findMany()
@@ -16,35 +14,23 @@ export const loader = async () => {
   }))
 }
 
-export const action = async (args: ActionFunctionArgs) => {
-  const schema = z.object({
-    userId: z.string(),
-    title: z.string().min(1),
-    content: z.string().min(1),
-  })
-  const parsed = schema.safeParse(Object.fromEntries(await args.request.formData()))
-
-  if (!parsed.success) return { message: '', fieldErrors: parsed.error.flatten().fieldErrors }
-
-  await db.todo.create({ data: parsed.data })
-
-  return { message: 'Post created!', fieldErrors: {} }
-}
-
-export type ActionData = typeof action
-
 const Page: React.FC = () => {
   const posts = useLoaderData<typeof loader>()
 
   return (
     <div>
-      <CreatePost />
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="text-2xl font-bold">Posts</h1>
+        <Button className="w-fit" asChild>
+          <Link to="/create-post">Create Post</Link>
+        </Button>
+      </div>
 
       <ul className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {posts.map((post) => (
           <li key={post.id} className="rounded-lg border p-6 shadow-lg">
-            <h3 className="mb-4 text-xl font-bold">{post.title}</h3>
-            <p className="">{post.content}</p>
+            <h3 className="mb-2 text-2xl font-bold">{post.title}</h3>
+            <p className="mb-6">{post.content}</p>
 
             <DeletePost id={post.id} />
           </li>
